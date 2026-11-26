@@ -46,7 +46,7 @@ FacePlugin screens, so the camera preview, the anti-spoofing gate, the shuffled 
 the progress ring and the result card are the same code that
 [FaceLivenessDetection-Android](https://github.com/Faceplugin-ltd/FaceLivenessDetection-Android)
 and [FaceLivenessDetection-iOS](https://github.com/Faceplugin-ltd/FaceLivenessDetection-iOS) run.
-The engine is the same binary too — `facerecognitionsdk`, built by the LX SDK.
+The engine is the same binary too — `facerecognitionsdk`.
 
 That is also why this package has **no camera dependency**: there is no JS preview, no frame
 shuttling over the bridge, and no overlay to draw.

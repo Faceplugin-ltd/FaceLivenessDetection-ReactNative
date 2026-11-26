@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
         #{missing.join("\n  ")}
 
       They are the same binaries the native iOS app embeds. Get them from the
-      Face-Recognition-LivenessDetection-iOS release (or the SDK repository) and drop them in
+      FaceRecognition-LivenessDetection-iOS release and drop them in
       ios/Frameworks/, then run `pod install` again.
     MSG
   end

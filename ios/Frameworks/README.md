@@ -5,7 +5,7 @@ app embeds. Four bundles belong here and none of them are in git:
 
 | Bundle | What it is |
 | ------ | ---------- |
-| `facerecognitionsdk.framework` | The engine wrapper (LX / Luxand build) |
+| `facerecognitionsdk.framework` | The engine wrapper (FacePlugin engine build) |
 | `FacePluginSDK.xcframework` | Vendor runtime the wrapper links |
 | `FacePlugin.xcframework` | Vendor runtime the wrapper links |
 | `FaceDetect.xcframework` | Vendor detector the wrapper links |
