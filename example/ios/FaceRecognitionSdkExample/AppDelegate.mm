@@ -22,7 +22,7 @@
 
 - (NSURL *)bundleURL
 {
-  // `python run_ios` embeds main.jsbundle. Prefer it so a Debug device install
+  // `python run_ios.py` embeds main.jsbundle. Prefer it so a Debug device install
   // boots without Metro. Fall back to the packager when no bundle is present.
   NSURL *embedded = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   if (embedded != nil) {
