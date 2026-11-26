@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <application>
+        <!-- The guided active-liveness screen, vendored from face-liveness-active. -->
+        <activity
+            android:name="com.faceplugin.faceliveness.active.ActiveLivenessActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <!-- The passive-liveness screen. -->
+        <activity
+            android:name="com.faceplugin.face_liveness_sdk.passive.PassiveLivenessActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+    </application>
+</manifest>

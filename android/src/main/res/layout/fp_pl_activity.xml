@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Passive liveness, mirroring the native demo's activity_camera.xml. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/fp_pl_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.faceplugin.face_liveness_sdk.passive.PassiveFaceView
+        android:id="@+id/fp_pl_faceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/fp_pl_btnClose"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:background="@drawable/fp_al_bg_chip"
+        android:contentDescription="@string/fp_pl_close"
+        android:padding="11dp"
+        android:src="@drawable/fp_al_ic_close" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/fp_al_bg_pill"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:text="@string/fp_pl_title"
+        android:textColor="@color/fp_al_text"
+        android:textSize="13sp" />
+
+    <ImageButton
+        android:id="@+id/fp_pl_btnSwitch"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:background="@drawable/fp_al_bg_chip"
+        android:contentDescription="@string/fp_pl_switch_camera"
+        android:padding="10dp"
+        android:src="@drawable/fp_al_ic_switch_camera" />
+
+    <TextView
+        android:id="@+id/fp_pl_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="34dp"
+        android:background="@drawable/fp_al_bg_pill"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="11dp"
+        android:paddingBottom="11dp"
+        android:text="@string/fp_pl_hint"
+        android:textColor="@color/fp_al_text"
+        android:textSize="14sp" />
+
+</FrameLayout>

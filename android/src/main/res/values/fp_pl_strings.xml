@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Text of the passive-liveness screen, matching the native demo's strings. -->
+<resources>
+    <string name="fp_pl_title">Passive liveness</string>
+    <string name="fp_pl_hint">Position your face in the frame</string>
+    <string name="fp_pl_analyzing">Analyzing liveness…</string>
+    <string name="fp_pl_close">Close</string>
+    <string name="fp_pl_switch_camera">Switch camera</string>
+</resources>

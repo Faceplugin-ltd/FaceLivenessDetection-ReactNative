@@ -1,0 +1,16 @@
+// Consumes the FacePlugin engine AAR as a flat artifact module.
+//
+// This is the same binary the native apps run: Face-LivenessDetection-Android/libs and
+// Face-LivenessDetection-iOS both use facerecognitionsdk. AGP will not let a library module
+// (which is what a React Native module is) link a local .aar directly, so it is published here
+// as the `default` configuration.
+def aar = file("facerecognitionsdk.aar")
+if (!aar.exists()) {
+    throw new GradleException(
+        "Missing example/android/libfacesdk/facerecognitionsdk.aar.\n" +
+        "Copy it from Face-LivenessDetection-Android/libs/facerecognitionsdk.aar, or run:\n" +
+        "  python scripts/sync_liveness_native.py --engine --engine-dest example/android/libfacesdk"
+    )
+}
+configurations.maybeCreate("default")
+artifacts.add("default", aar)

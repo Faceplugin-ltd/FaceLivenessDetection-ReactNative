@@ -1,0 +1,124 @@
+buildscript {
+  // Buildscript is evaluated before everything else, so getExtOrDefault is not available yet.
+  def kotlin_version = rootProject.ext.has("kotlinVersion")
+      ? rootProject.ext.get("kotlinVersion")
+      : project.properties["FaceLivenessSdk_kotlinVersion"]
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.1.4"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["FaceLivenessSdk_" + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["FaceLivenessSdk_" + name]).toInteger()
+}
+
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def major = parsed[0].toInteger()
+  def minor = parsed[1].toInteger()
+
+  // Namespace support was added in 7.3.0
+  return (major == 7 && minor >= 3) || major >= 8
+}
+
+android {
+  if (supportsNamespace()) {
+    namespace "com.faceplugin.face_liveness_sdk"
+
+    sourceSets {
+      main {
+        manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+    }
+  }
+
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
+
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  // The vendored native liveness sources are compiled for 17, as in the native app.
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+
+dependencies {
+  // For < 0.71 this comes from the local maven repo; for > 0.71 the react gradle plugin
+  // replaces it with com.facebook.react:react-android:$version.
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  implementation "androidx.appcompat:appcompat:1.7.0"
+  implementation "androidx.core:core-ktx:1.13.1"
+
+  // The vendored kit binds CameraX for the preview and the frame analyzer.
+  def camerax = "1.4.2"
+  implementation "androidx.camera:camera-core:$camerax"
+  implementation "androidx.camera:camera-camera2:$camerax"
+  implementation "androidx.camera:camera-lifecycle:$camerax"
+  implementation "androidx.camera:camera-view:$camerax"
+
+  // The engine arrives as a flat artifact module. AGP will not let a library module link a local
+  // .aar with implementation files(…) — see example/android/libfacesdk.
+  def libfacesdk = findProject(":libfacesdk")
+  if (libfacesdk != null) {
+    implementation project(path: ":libfacesdk")
+  } else {
+    throw new GradleException(
+      "Missing the Face Liveness Android runtime.\n" +
+      "Put facerecognitionsdk.aar at example/android/libfacesdk/ (settings.gradle already\n" +
+      "includes :libfacesdk), or add a :libfacesdk module to your own app — see\n" +
+      "example/android/libfacesdk/README.md."
+    )
+  }
+}

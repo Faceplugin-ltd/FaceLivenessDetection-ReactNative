@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Passive-liveness verdict colours, matching the native demo's liveness_* palette.
+     Prefixed so a host app's palette cannot collide. -->
+<resources>
+    <color name="fp_pl_real">#2EE6A6</color>
+    <color name="fp_pl_spoof">#FF6B6B</color>
+    <color name="fp_pl_neutral">#FFFFFF</color>
+</resources>
