@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Fetch iOS frameworks if missing, then run the React Native iOS example (macOS only).
 
-Mirrors the README manual steps: fetch missing native binaries, then the
-standard yarn / React Native commands for this repo.
+Mirrors the README: stage runtimes, yarn install, embed main.jsbundle (gitignored;
+Xcode Copy Bundle Resources needs it), pod install, then yarn example ios.
 """
 from __future__ import annotations
 
-import json
 import os
 import shutil
 import subprocess
@@ -15,6 +14,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 IS_WIN = os.name == "nt"
+FW = ROOT / "ios" / "Frameworks"
+BUNDLE = ROOT / "example" / "ios" / "FaceRecognitionSdkExample" / "main.jsbundle"
 
 
 def die(msg: str) -> None:
@@ -50,12 +51,30 @@ def yarn_cmd() -> list[str]:
     return [need("yarn", "Enable Yarn (corepack enable) or install Yarn 3.")]
 
 
-def yarn_install() -> None:
-    """Yarn workspace install at the repo root (see package.json packageManager)."""
-    run([*yarn_cmd(), "install"])
-
-
-FW = ROOT / "ios" / "Frameworks"
+def ensure_main_jsbundle() -> None:
+    """Xcode lists FaceRecognitionSdkExample/main.jsbundle in Resources; clones lack it."""
+    BUNDLE.parent.mkdir(parents=True, exist_ok=True)
+    print(f"bundling JS -> {BUNDLE.relative_to(ROOT)}")
+    run(
+        [
+            *yarn_cmd(),
+            "example",
+            "react-native",
+            "bundle",
+            "--platform",
+            "ios",
+            "--dev",
+            "true",
+            "--entry-file",
+            "index.js",
+            "--bundle-output",
+            str(BUNDLE),
+            "--assets-dest",
+            str(ROOT / "example" / "ios"),
+        ]
+    )
+    if not BUNDLE.is_file() or BUNDLE.stat().st_size == 0:
+        die(f"failed to create {BUNDLE}")
 
 
 def main() -> None:
@@ -65,7 +84,8 @@ def main() -> None:
         die("iOS builds need macOS and Xcode. Use python run_android.py on this machine.")
     print(f"{ROOT.name}: ios (react-native)")
     fp_releases.ensure_ios_engine(ROOT, FW, with_bridge=False)
-    yarn_install()
+    run([*yarn_cmd(), "install"])
+    ensure_main_jsbundle()
     ios = ROOT / "example" / "ios"
     if which("pod") and (ios / "Podfile").is_file():
         run(["pod", "install"], cwd=ios)
