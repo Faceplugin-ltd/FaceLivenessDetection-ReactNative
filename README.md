@@ -18,11 +18,13 @@
 ## Quick start
 
 - [ ] Clone [FaceLivenessDetection-ReactNative](https://github.com/Faceplugin-ltd/FaceLivenessDetection-ReactNative)
-- [ ] `yarn install` (the example is a workspace of this package)
-- [ ] Put the engine at `example/android/libfacesdk/facerecognitionsdk.aar` — [Get the engine](#get-the-engine)
-- [ ] On macOS, add the four iOS frameworks to `ios/Frameworks/`, then `cd example/ios && pod install`
-- [ ] `python run_android.py` (or `python run_ios.py`) with a **physical** phone plugged in
+- [ ] Engine binaries (auto-downloaded by the runner, or place them yourself) — [Get the engine](#get-the-engine)
+- [ ] `python run_android.py` (or `python run_ios.py` on macOS) with a **physical** phone plugged in
 - [ ] Home status shows **Ready** → **Active liveness** / **Passive liveness** unlock
+
+That is the whole setup. The scripts do the rest: the yarn workspace install, the JS bundle, `pod
+install` on macOS, the build, and the install onto the phone. They need Node 18+ and JDK 17 (plus
+Xcode 15+ on macOS) on PATH, and stop with a named hint if anything is missing.
 
 ## Introduction
 
@@ -120,14 +122,15 @@ The engine is the same binary the native apps run, and it is not in git.
 example/android/libfacesdk/facerecognitionsdk.aar
 ```
 
-Download it from the
-[FaceRecognition-LivenessDetection-Android release](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-Android/releases/tag/latest),
-copy it from `FaceLivenessDetection-Android/libs/`, or let `run_android.py` place it for you. AGP
+Download `facerecognitionsdk.aar` from the
+[FaceRecognition-LivenessDetection-Android Releases](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-Android/releases/tag/latest)
+page, or run `python run_android.py` — it downloads missing binaries from Releases. AGP
 refuses `implementation(files("…aar"))` on a library module — which is what a React Native module
 is — so the engine always arrives through `:libfacesdk`.
 
-**iOS** — four bundles, from the
-[FaceRecognition-LivenessDetection-iOS release](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-iOS/releases/tag/latest):
+**iOS** — four bundles from **`runtime.zip`** on the
+[FaceRecognition-LivenessDetection-iOS Releases](https://github.com/Faceplugin-ltd/FaceRecognition-LivenessDetection-iOS/releases/tag/latest)
+page (`run_ios.py` downloads and stages them if missing):
 
 ```text
 ios/Frameworks/facerecognitionsdk.framework
@@ -145,7 +148,7 @@ build rather than as a link error.
 python run_android.py     # or: python run_ios.py
 ```
 
-The runner checks for a device, places the engine if it can find it, and starts the app. By hand:
+The runner checks for a device, downloads the engine from GitHub Releases if it is missing, and starts the app. By hand:
 
 ```bash
 yarn install
